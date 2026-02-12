@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Notepad 2</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #1e1e1e;
+            color: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #4caf50;
+        }
+
+        textarea {
+            width: 90%;
+            max-width: 800px;
+            height: 400px;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 10px;
+            border: none;
+            resize: none;
+            background: #2b2b2b;
+            color: #f5f5f5;
+            line-height: 1.5;
+        }
+
+        textarea:focus {
+            outline: 2px solid #4caf50;
+        }
+    </style>
+</head>
+<body>
+    <h1>Notepad 2</h1>
+    <textarea id="note" placeholder="Write your epic notes here..."></textarea>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    <script>
+        // Your Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyDLXUy8P8-E8hU-I4YzzobyZsB-Domf8H8",
+            authDomain: "notepad2-n.firebaseapp.com",
+            databaseURL: "https://notepad2-n-default-rtdb.firebaseio.com",
+            projectId: "notepad2-n",
+            storageBucket: "notepad2-n.firebasestorage.app",
+            messagingSenderId: "992368960966",
+            appId: "1:992368960966:web:dc99a03acde43cb704fec7"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const dbRef = firebase.database().ref('doc');
+
+        const noteArea = document.getElementById("note");
+
+        // Load saved text on page load
+        dbRef.get().then(snapshot => {
+            if (snapshot.exists()) {
+                noteArea.value = snapshot.val();
+            }
+        });
+
+        // Auto-save whenever user types
+        noteArea.addEventListener("input", () => {
+            dbRef.set(noteArea.value);
+        });
+    </script>
+</body>
+</html>
