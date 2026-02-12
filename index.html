@@ -6,8 +6,8 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #1e1e1e;
-            color: #f5f5f5;
+            background: #f0f0f0;
+            color: #333;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -15,31 +15,42 @@
         }
 
         h1 {
-            margin-bottom: 20px;
-            color: #4caf50;
+            margin-bottom: 10px;
         }
 
         textarea {
             width: 90%;
-            max-width: 800px;
+            max-width: 700px;
             height: 400px;
             padding: 10px;
             font-size: 16px;
-            border-radius: 10px;
-            border: none;
+            border-radius: 5px;
+            border: 1px solid #ccc;
             resize: none;
-            background: #2b2b2b;
-            color: #f5f5f5;
             line-height: 1.5;
         }
 
-        textarea:focus {
-            outline: 2px solid #4caf50;
-        }
+       button {
+    		margin-top: 1px;
+    		margin-bottom: 10px;
+    		padding: 5px 10px; /* reduce padding to fit text */
+    		font-size: 16px;
+    		cursor: pointer;
+    		height: auto; /* let button height adjust to content */
+    		width: 100px;
+    		box-sizing: border-box; /* include padding in width/height */
+    		text-align: center; /* center text horizontally */
+    		display: inline-flex;
+    		align-items: center;
+    		justify-content: center; /* center text vertically */
+		}
+
     </style>
 </head>
 <body>
     <h1>Notepad 2</h1>
+        <button id="saveBtn">💾 Save</button>
+
     <textarea id="note" placeholder="Write your epic notes here..."></textarea>
 
     <!-- Firebase SDKs -->
@@ -62,6 +73,7 @@
         const dbRef = firebase.database().ref('doc');
 
         const noteArea = document.getElementById("note");
+        const saveBtn = document.getElementById("saveBtn");
 
         // Load saved text on page load
         dbRef.get().then(snapshot => {
@@ -70,9 +82,20 @@
             }
         });
 
-        // Auto-save whenever user types
-        noteArea.addEventListener("input", () => {
+        // Save function
+        function saveNote() {
             dbRef.set(noteArea.value);
+        }
+
+        // Save button click
+        saveBtn.addEventListener("click", saveNote);
+
+        // Ctrl+S shortcut
+        document.addEventListener("keydown", function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault(); // prevent browser save
+                saveNote();
+            }
         });
     </script>
 </body>
