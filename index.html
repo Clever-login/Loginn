@@ -57,7 +57,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
     <script>
-        // Your Firebase config
+        // Firebase config
         const firebaseConfig = {
             apiKey: "AIzaSyDLXUy8P8-E8hU-I4YzzobyZsB-Domf8H8",
             authDomain: "notepad2-n.firebaseapp.com",
@@ -75,22 +75,18 @@
         const noteArea = document.getElementById("note");
         const saveBtn = document.getElementById("saveBtn");
 
-        // Load saved text on page load
         dbRef.get().then(snapshot => {
             if (snapshot.exists()) {
                 noteArea.value = snapshot.val();
             }
         });
 
-        // Save function
         function saveNote() {
             dbRef.set(noteArea.value);
         }
 
-        // Save button click
         saveBtn.addEventListener("click", saveNote);
 
-        // Ctrl+S shortcut
         document.addEventListener("keydown", function(e) {
             if ((e.ctrlKey || e.metaKey) && e.key === 's') {
                 e.preventDefault(); // prevent browser save
